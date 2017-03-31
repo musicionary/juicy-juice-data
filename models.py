@@ -1,5 +1,4 @@
 from app import db
-from sqlalchemy.dialects.postgresql import JSON
 
 ingredients_juices = db.Table('ingredients_juices',
     db.Column('juice_id', db.Integer, db.ForeignKey('juice.id')),
@@ -27,6 +26,7 @@ class Juice(db.Model):
 
     def __repr__(self):
         return '<item name {}>'.format(self.item_name)
+
 
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
