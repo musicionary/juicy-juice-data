@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <div class="container">
+    <h2>{{ingredient.name}}</h2>
+    {% if ingredient.juices %}
+      <ul class="collection">
+        {% for juice in ingredient.juices %}
+          <li class="collection-item">{{juice.item_name}}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+{% endblock %}

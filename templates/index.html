@@ -1,26 +1,60 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="container">
-  <h1>Say something</h1>
-  <form role="form" method='POST' action='/'>
-    <div class="form-group">
-      <input type="text" name="url" class="form-control" id="url-box" placeholder="Enter URL..." style="max-width: 300px;" autofocus required>
-    </div>
-    <button type="submit" class="btn btn-default">Submit</button>
-  </form>
-  <br>
+
 <!--
   {% for error in errors %}
     <h4>{{ error }}</h4>
   {% endfor %} -->
+  <div class="row">
+    {% for juice in juices %}
+    <div class="card large col s4">
+      <!-- <div class="card-image waves-effect waves-block waves-light">
+        <img class="activator" src="images/office.jpg">
+      </div> -->
+      <div class="card-content">
+        <span class="card-title activator grey-text text-darken-4">{{juice.item_name}}<i class="material-icons right">more_vert</i></span>
+        <p>Calories: <strong>{{juice.calories}}</strong></p>
+        <p>Serving Size: {{juice.serving_size_qty}} {{juice.serving_size_unit}}</p>
+      </div>
+      <div class="card-tabs">
+        <ul class="tabs tabs-fixed-width">
+          <li class="tab"><a class="active" href="#{{juice.id}}">Test 1</a></li>
+          <li class="tab"><a href="#{{juice.item_id}}">Ingredients</a></li>
+        </ul>
+      </div>
+      <div class="card-content grey lighten-4">
+        <div id="{{juice.id}}">
+          <p>Calories: <strong>{{juice.calories}}</strong></p>
+          <p>Serving Size: {{juice.serving_size_qty}} {{juice.serving_size_unit}}</p>
+        </div>
+        <ul id="{{juice.item_id}}" class="collection">
+          {% if juice.ingredients %}
+            {% for ingredient in juice.ingredients %}
+            <li class="collection-item"><a href="{{ url_for('show_ingredient', ingredient_id=ingredient.id) }}">{{ingredient.name}}</a></li>
+            {% endfor %}
+          {% else %}
+            <li class="collection-item">No data available at this time.</li>
+          {% endif %}
+        </ul>
+      </div>
+      <!-- <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4">{{juice.item_name}}<i class="material-icons right">close</i></span>
+        <ul>
+          {% for ingredient in juice.ingredients %}
+          <li>{{ingredient.name}}</li>
+          {% endfor %}
+        </ul>
+      </div> -->
+    </div>
+    {% endfor %}
+  </div>
 
-  {% if results %}
-    <p>{{results}}</p>
+  {% if total %}
+    <p>{{total}}</p>
   {% endif %}
 
   {% if calories_data %}
     <p>{{calories_data}}</p>
   {% endif %}
-</div>
 {% endblock%}

@@ -1,23 +1,31 @@
 from flask import Flask, render_template, request
 # from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 import os
 import json
 import requests
 import re
 
+
 app = Flask(__name__)
+admin = Admin(app, name='Juicy Juicy Data', template_mode='bootstrap3')
+
+
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # api = Api(api)
 db = SQLAlchemy(app)
 
 from models import ingredients_juices, Ingredient, Juice
+admin.add_view(ModelView(Juice, db.session))
+admin.add_view(ModelView(Ingredient, db.session))
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     errors = []
-    products = {}
+    total = {}
 
     payload = {
         "appId": "f5de3947",
@@ -33,7 +41,7 @@ def index():
     url = "https://api.nutritionix.com/v1_1/search/"
     # headers = {'content-type': 'application/json'}
     res = requests.post(url, json=payload).json()
-    products["total"] = res['total']
+    total["total"] = res['total']
 
     total_calories = 0
     total_ounces = 0
@@ -57,11 +65,12 @@ def index():
         "avg_calories_per_ounce": avg_calories,
     }
 
+    return render_template('index.html', errors=errors, total=total, calories_data=calories_data, juices=juices_list)
 
-
-    return render_template('index.html', errors=errors, results=products, calories_data=calories_data)
-
-
+@app.route("/ingredients/<ingredient_id>")
+def show_ingredient(ingredient_id):
+    ingredient = Ingredient.query.filter_by(id=ingredient_id).first()
+    return render_template('ingredient-detail.html', ingredient=ingredient)
 
 if __name__ == '__main__':
     app.run()

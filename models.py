@@ -14,7 +14,7 @@ class Juice(db.Model):
     servings_per_container = db.Column(db.Integer)
     serving_size_qty = db.Column(db.Integer)
     serving_size_unit = db.Column(db.String())
-    ingredients = db.relationship('Ingredient', secondary=ingredients_juices, backref=db.backref('juices', lazy='dynamic'))
+    ingredients = db.relationship('Ingredient', secondary=ingredients_juices, backref=db.backref('juices', lazy='select'))
 
     def __init__(self, item_id, item_name, calories, servings_per_container, serving_size_qty, serving_size_unit):
         self.item_id = item_id
