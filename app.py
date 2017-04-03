@@ -22,6 +22,8 @@ from models import ingredients_juices, Ingredient, Juice
 admin.add_view(ModelView(Juice, db.session))
 admin.add_view(ModelView(Ingredient, db.session))
 
+from assets import assets
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     errors = []

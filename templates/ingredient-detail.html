@@ -2,7 +2,7 @@
 
 {% block content %}
   <div class="container">
-    <h2>{{ingredient.name}}</h2>
+    <h2 class="ing-name">{{ingredient.name}}</h2>
     {% if ingredient.juices %}
       <ul class="collection">
         {% for juice in ingredient.juices %}
