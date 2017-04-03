@@ -1,6 +1,7 @@
 # Juicy Juice Data Analysis
 
 ## Quick Start
+To visit a live version of the site, please visit: https://juicy-juice-data.herokuapp.com/
 
 ### First Steps
 ```sh
