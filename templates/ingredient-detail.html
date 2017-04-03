@@ -2,9 +2,12 @@
 
 {% block content %}
   <div class="container">
-    <h2 class="ing-name">{{ingredient.name}}</h2>
     {% if ingredient.juices %}
-      <ul class="collection">
+      <ul class="collection with-header">
+        <li class="collection-header">
+          <h4>{{ingredient.name}}</h4>
+          <span>Found in the following products:</span>
+        </li>
         {% for juice in ingredient.juices %}
           <li class="collection-item">{{juice.item_name}}</li>
         {% endfor %}

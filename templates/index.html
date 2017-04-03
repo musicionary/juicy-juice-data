@@ -2,59 +2,83 @@
 
 {% block content %}
 
-<!--
-  {% for error in errors %}
-    <h4>{{ error }}</h4>
-  {% endfor %} -->
+
   <div class="row">
-    {% for juice in juices %}
-    <div class="card large col s4">
-      <!-- <div class="card-image waves-effect waves-block waves-light">
-        <img class="activator" src="images/office.jpg">
-      </div> -->
-      <div class="card-content">
-        <span class="card-title activator grey-text text-darken-4">{{juice.item_name}}<i class="material-icons right">more_vert</i></span>
-        <p>Calories: <strong>{{juice.calories}}</strong></p>
-        <p>Serving Size: {{juice.serving_size_qty}} {{juice.serving_size_unit}}</p>
+    <div class="col s3">
+      <div class="collection nav-buttons-col">
+        <a id="show-chart" class="waves-effect waves-light btn-large collection-item active amber accent-3">Show Chart</a>
+        <a id="show-table" class="waves-effect waves-light btn-large collection-item active amber accent-3">Show Table</a>
       </div>
-      <div class="card-tabs">
-        <ul class="tabs tabs-fixed-width">
-          <li class="tab"><a class="active" href="#{{juice.id}}">Test 1</a></li>
-          <li class="tab"><a href="#{{juice.item_id}}">Ingredients</a></li>
-        </ul>
-      </div>
-      <div class="card-content grey lighten-4">
-        <div id="{{juice.id}}">
-          <p>Calories: <strong>{{juice.calories}}</strong></p>
-          <p>Serving Size: {{juice.serving_size_qty}} {{juice.serving_size_unit}}</p>
-        </div>
-        <ul id="{{juice.item_id}}" class="collection">
-          {% if juice.ingredients %}
-            {% for ingredient in juice.ingredients %}
-            <li class="collection-item"><a href="{{ url_for('show_ingredient', ingredient_id=ingredient.id) }}">{{ingredient.name}}</a></li>
-            {% endfor %}
-          {% else %}
-            <li class="collection-item">No data available at this time.</li>
-          {% endif %}
-        </ul>
-      </div>
-      <!-- <div class="card-reveal">
-        <span class="card-title grey-text text-darken-4">{{juice.item_name}}<i class="material-icons right">close</i></span>
-        <ul>
-          {% for ingredient in juice.ingredients %}
-          <li>{{ingredient.name}}</li>
-          {% endfor %}
-        </ul>
-      </div> -->
     </div>
-    {% endfor %}
+
+    <div class="col s9" id="chart-display">
+      <canvas id="chart" width="250" height="250"></canvas>
+    </div>
+      <div class="col s9" id="juices-list">
+        <h4 class="center">Product List</h4>
+        {% for juice in juices %}
+        <ul class="collapsible popout" data-collapsible="accordion">
+          <li>
+            <div class="collapsible-header row">
+              <div class="col s6">
+                <h5>{{juice.item_name}}</h5>
+              </div>
+              <div class="col s3"><span>Calories: <strong>{{juice.calories}}</strong></span></div>
+              <div class="col s3"><span class="right">Serving Size: <strong>{{juice.serving_size_qty}} {{juice.serving_size_unit}}</strong></span></div>
+            </div>
+            <div class="collapsible-body">
+              <ul class="collection">
+                {% if juice.ingredients %}
+                  {% for ingredient in juice.ingredients %}
+                  <li class="collection-item"><a href="{{ url_for('show_ingredient', ingredient_id=ingredient.id) }}">{{ingredient.name}}</a></li>
+                  {% endfor %}
+                {% else %}
+                  <li class="collection-item">No data available at this time.</li>
+                {% endif %}
+              </ul>
+            </div>
+          </li>
+        </ul>
+        {% endfor %}
+      </div>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script>
+    var barData = {
+      labels : [
+        {% for juice in juices %}
+          "{{juice.item_name}}",
+        {% endfor %}
+      ],
+      datasets : [{
+        label: "# of Calories",
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        strokeColor: "rgba(151,187,205,1)",
+        pointColor: "rgba(151,187,205,1)",
+        data : [
+          {% for juice in juices %}
+            {{juice.calories}},
+          {% endfor %}
+        ]
+      }]
+    };
 
-  {% if total %}
-    <p>{{total}}</p>
-  {% endif %}
+    // get bar chart canvas
+    var ctx = document.getElementById("chart");
 
-  {% if calories_data %}
-    <p>{{calories_data}}</p>
-  {% endif %}
+    steps = 10
+    max = 10
+    // draw bar chart
+    new Chart(ctx, {
+      type: 'bar',
+      data: barData,
+      options: {
+        responsive: true,
+        title: {
+            display: true,
+            text: 'Juicy Juice Calorie Comparison'
+        }
+      }
+    });
+  </script>
 {% endblock%}

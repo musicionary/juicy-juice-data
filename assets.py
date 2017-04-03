@@ -7,7 +7,11 @@ bundles = {
         output="build/styles.css",
         filters="cssmin",
     ),
-
+    "js": Bundle(
+        "main.js",
+        output="build/scripts.js",
+        filters="jsmin",
+    )
 }
 
 
