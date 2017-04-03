@@ -3,9 +3,9 @@ import requests
 import re
 from flask_script import Command
 
-
 from app import db
 from models import ingredients_juices, Ingredient, Juice
+
 
 class Seed(Command):
     """Seeds the database from the nutritionix api"""
@@ -27,11 +27,11 @@ class Seed(Command):
             "offset": offset,
             "limit": 50,
             "sort": {
-                "field":"item_name.sortable_na",
-                "order":"desc"
+                "field": "item_name.sortable_na",
+                "order": "desc"
             },
             "filters": {
-                "brand_id":"51db37d0176fe9790a899db2"
+                "brand_id": "51db37d0176fe9790a899db2"
             }
         }
         return payload
@@ -77,7 +77,6 @@ class Seed(Command):
                     else:
                         ing_entry = Ingredient.query.filter_by(name=ing).first()
                         juice.ingredients.append(ing_entry)
-
 
         db.session.commit()
         return res

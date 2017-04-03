@@ -1,9 +1,10 @@
 from app import db
 
-ingredients_juices = db.Table('ingredients_juices',
-    db.Column('juice_id', db.Integer, db.ForeignKey('juice.id')),
-    db.Column('ingredient_id', db.Integer, db.ForeignKey('ingredient.id'))
-)
+ingredients_juices = db.Table('ingredients_juices', db.Column('juice_id',
+                              db.Integer, db.ForeignKey('juice.id')),
+                              db.Column('ingredient_id',
+                              db.Integer, db.ForeignKey('ingredient.id'))
+                              )
 
 
 class Juice(db.Model):
@@ -14,9 +15,18 @@ class Juice(db.Model):
     servings_per_container = db.Column(db.Integer)
     serving_size_qty = db.Column(db.Integer)
     serving_size_unit = db.Column(db.String())
-    ingredients = db.relationship('Ingredient', secondary=ingredients_juices, backref=db.backref('juices', lazy='select'))
+    ingredients = db.relationship('Ingredient',
+                                  secondary=ingredients_juices,
+                                  backref=db.backref('juices', lazy='select')
+                                  )
 
-    def __init__(self, item_id, item_name, calories, servings_per_container, serving_size_qty, serving_size_unit):
+    def __init__(self,
+                 item_id,
+                 item_name,
+                 calories,
+                 servings_per_container,
+                 serving_size_qty,
+                 serving_size_unit):
         self.item_id = item_id
         self.item_name = item_name
         self.calories = calories
