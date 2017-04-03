@@ -12,7 +12,6 @@ import re
 app = Flask(__name__)
 admin = Admin(app, name='Juicy Juicy Data', template_mode='bootstrap3')
 app.config.from_object(os.environ['APP_SETTINGS'])
-print(os.environ['APP_SETTINGS'])
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
