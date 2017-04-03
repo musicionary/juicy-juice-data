@@ -8,9 +8,6 @@ import json
 import requests
 import re
 
-from models import ingredients_juices, Ingredient, Juice
-from assets import assets
-
 
 app = Flask(__name__)
 admin = Admin(app, name='Juicy Juicy Data', template_mode='bootstrap3')
@@ -19,8 +16,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 api = Api(app)
 
+from models import ingredients_juices, Ingredient, Juice
 admin.add_view(ModelView(Juice, db.session))
 admin.add_view(ModelView(Ingredient, db.session))
+
+from assets import assets
 
 
 @app.route('/', methods=['GET'])
@@ -46,7 +46,7 @@ class Totals(Resource):
             "offset": 0,
             "limit": 50,
             "filters": {
-                "brand_id": "51db37d0176fe9790a899db2"
+                "brand_id":"51db37d0176fe9790a899db2"
             }
         }
 
@@ -58,14 +58,9 @@ class Totals(Resource):
             if juice.calories:
                 total_calories += juice.calories
 
-            if juice.servings_per_container and
-            juice.serving_size_qty and
-            juice.serving_size_unit == "fl oz":
-                total_ounces +=
-                juice.servings_per_container * juice.serving_size_qty
-            elif juice.servings_per_container and
-            juice.serving_size_qty and
-            juice.serving_size_unit == "ml":
+            if juice.servings_per_container and juice.serving_size_qty and juice.serving_size_unit == "fl oz":
+                total_ounces += juice.servings_per_container * juice.serving_size_qty
+            elif juice.servings_per_container and juice.serving_size_qty and juice.serving_size_unit == "ml":
                 ml_to_oz = juice.serving_size_qty * 0.033814
                 total_ounces += juice.servings_per_container * ml_to_oz
 
